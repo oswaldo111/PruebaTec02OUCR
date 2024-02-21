@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using PruebaTec02OUCR.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<EditorialContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("conn");
 
 var app = builder.Build();
 
