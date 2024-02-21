@@ -247,3 +247,4 @@ C:\Users\MINEDUCYT\Desktop\PruebaTec02OUCR\PruebaTec02OUCR\PruebaTec02OUCR\obj\D
 C:\Users\MINEDUCYT\Desktop\PruebaTec02OUCR\PruebaTec02OUCR\PruebaTec02OUCR\obj\Debug\net6.0\PruebaTec02OUCR.pdb
 C:\Users\MINEDUCYT\Desktop\PruebaTec02OUCR\PruebaTec02OUCR\PruebaTec02OUCR\obj\Debug\net6.0\PruebaTec02OUCR.genruntimeconfig.cache
 C:\Users\MINEDUCYT\Desktop\PruebaTec02OUCR\PruebaTec02OUCR\PruebaTec02OUCR\obj\Debug\net6.0\ref\PruebaTec02OUCR.dll
+C:\Users\MINEDUCYT\Desktop\PruebaTec02OUCR\PruebaTec02OUCR\PruebaTec02OUCR\obj\Debug\net6.0\PruebaTec02OUCR.sourcelink.json

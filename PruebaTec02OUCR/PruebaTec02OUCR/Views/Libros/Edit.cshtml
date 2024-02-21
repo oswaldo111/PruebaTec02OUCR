@@ -4,13 +4,13 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Libro</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="LibrosId" />
             <div class="form-group">
@@ -30,25 +30,58 @@
             </div>
             <div class="form-group">
                 <label asp-for="Imagen" class="control-label"></label>
-                <input asp-for="Imagen" class="form-control" />
+                <input type="file" asp-for="Imagen" id="fileImagen" class="form-control" onchange="mostrarVistaPrevia()" accept="image/*" />
                 <span asp-validation-for="Imagen" class="text-danger"></span>
             </div>
+            <div>
+                @{
+                    string urlBase64 = "";
+                    if (Model.Imagen != null && Model.Imagen.Length > 0)
+                    {
+                        string base64String = Convert.ToBase64String(Model.Imagen);
+                        urlBase64 = "data:image/jpeg;base64," + base64String;
+                    }
+                }
+                @if (urlBase64.Trim().Length > 0)
+                {
+                    <img id="imagenPrevia" src="@urlBase64" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                }
+                else
+                {
+                    <img id="imagenPrevia" src="~/images/default.jpg" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                }
+            </div>
             <div class="form-group">
-                <label asp-for="IdAutor" class="control-label"></label>
+                <label asp-for="IdAutor" class="control-label">Autor</label>
                 <select asp-for="IdAutor" class="form-control" asp-items="ViewBag.IdAutor"></select>
                 <span asp-validation-for="IdAutor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar a la lista</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function mostrarVistaPrevia() {
+            var input = document.getElementById('fileImagen');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    document.getElementById('imagenPrevia').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]); // Convierte el archivo a una URL base64
+            }
+        }
+    </script>
 }

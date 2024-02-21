@@ -56,16 +56,20 @@ namespace PruebaTec02OUCR.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LibrosId,Nombre,Precio,Descripcion,Imagen,IdAutor")] Libro libro)
+        public async Task<IActionResult> Create([Bind("LibrosId,Nombre,Precio,Descripcion,Imagen,IdAutor")] Libro libro, IFormFile imagen)
         {
-            if (ModelState.IsValid)
+            if (imagen != null && imagen.Length > 0)
             {
-                _context.Add(libro);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imagen.CopyToAsync(memoryStream);
+                    libro.Imagen = memoryStream.ToArray();
+                }
             }
-            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "IdAutor", libro.IdAutor);
-            return View(libro);
+            _context.Add(libro);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Libros/Edit/5
@@ -81,7 +85,7 @@ namespace PruebaTec02OUCR.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "IdAutor", libro.IdAutor);
+            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
             return View(libro);
         }
 
@@ -90,35 +94,52 @@ namespace PruebaTec02OUCR.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LibrosId,Nombre,Precio,Descripcion,Imagen,IdAutor")] Libro libro)
+        public async Task<IActionResult> Edit(int id, [Bind("LibrosId,Nombre,Precio,Descripcion,Imagen,IdAutor")] Libro libro, IFormFile imagen)
         {
             if (id != libro.LibrosId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (imagen != null && imagen.Length > 0)
             {
-                try
+                using (var memoryStream = new MemoryStream())
                 {
-                    _context.Update(libro);
-                    await _context.SaveChangesAsync();
+                    await imagen.CopyToAsync(memoryStream);
+                    libro.Imagen = memoryStream.ToArray();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LibroExists(libro.LibrosId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(libro);
+                await _context.SaveChangesAsync();
             }
-            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "IdAutor", libro.IdAutor);
-            return View(libro);
+            else
+            {
+                var librosFind = await _context.Libros.FirstOrDefaultAsync(s => s.LibrosId == libro.LibrosId);
+                if (librosFind?.Imagen?.Length > 0)
+                    libro.Imagen = librosFind.Imagen;
+                librosFind.Nombre = libro.Nombre;
+                librosFind.Precio = libro.Precio;
+                librosFind.Descripcion = libro.Descripcion;
+                librosFind.IdAutor = libro.IdAutor;
+                _context.Update(librosFind);
+                await _context.SaveChangesAsync();
+            }
+            try
+            {
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LibroExists(libro.LibrosId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Libros/Delete/5
@@ -155,6 +176,15 @@ namespace PruebaTec02OUCR.Controllers
                 _context.Libros.Remove(libro);
             }
             
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteImagen(int? id)
+        {
+            var librosFind = await _context.Libros.FirstOrDefaultAsync(s => s.LibrosId == id);
+            librosFind.Imagen = null;
+            _context.Update(librosFind);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

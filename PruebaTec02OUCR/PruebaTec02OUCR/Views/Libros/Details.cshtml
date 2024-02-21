@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
     <h4>Libro</h4>
@@ -32,17 +32,25 @@
             @Html.DisplayNameFor(model => model.Imagen)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imagen)
+            @{
+                string urlBase64 = "";
+                if (Model.Imagen != null && Model.Imagen.Length > 0)
+                {
+                    string base64String = Convert.ToBase64String(Model.Imagen);
+                    urlBase64 = "data:image/jpeg;base64," + base64String;
+                }
+            }
+            <img src="@urlBase64" width="50px" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdAutorNavigation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdAutorNavigation.IdAutor)
+            @Html.DisplayFor(model => model.IdAutorNavigation.Nombre)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.LibrosId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-light" asp-action="Edit" asp-route-id="@Model?.LibrosId">Editar</a> |
+    <a asp-action="Index">regresar a la lista</a>
 </div>
