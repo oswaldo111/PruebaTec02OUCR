@@ -47,7 +47,7 @@ namespace PruebaTec02OUCR.Controllers
         // GET: Libros/Create
         public IActionResult Create()
         {
-            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "IdAutor");
+            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre");
             return View();
         }
 

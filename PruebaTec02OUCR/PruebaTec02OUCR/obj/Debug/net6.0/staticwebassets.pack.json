@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\MINEDUCYT\\Desktop\\PruebaTec02OUCR\\PruebaTec02OUCR\\PruebaTec02OUCR\\wwwroot\\imagenes\\Captura de pantalla 2024-01-23 214319.png",
+      "PackagePath": "staticwebassets\\imagenes\\Captura de pantalla 2024-01-23 214319.png"
+    },
+    {
       "Id": "C:\\Users\\MINEDUCYT\\Desktop\\PruebaTec02OUCR\\PruebaTec02OUCR\\PruebaTec02OUCR\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
